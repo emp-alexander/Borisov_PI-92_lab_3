@@ -2,9 +2,10 @@
 #include <string.h>
 #include <locale.h>
 #include <malloc.h>
+#include <iostream>
 #pragma warning (disable:4996)
 #define SIZE 25
-//using namespace std;
+
 
 
 class Auto_show
@@ -121,6 +122,38 @@ int main()
 
 	free(auto_1);
 	free(auto_2);
+
+
+	//динамич. массив объектов
+
+	puts("Динамич. массив");
+
+	puts("Первый автомобиль");
+	Auto_show* car1 = new Auto_show[3];
+
+	car1[0].init("lada", "granta", 300, 150, 2017);
+	car1[1].init("lada", "vesta", 900, 180, 2020);
+	car1[2].init("nissan", "gt-r", 3500, 300, 2014);
+	for (int i = 0; i < 3; i++)
+	{
+		car1[i].Display();
+	}
+
+
+
+	puts("Второй автомобиль");
+	Auto_show** car2 = new Auto_show * [3];
+	for (int i = 0; i < 3; i++)
+	{
+		car2[i] = new Auto_show();
+		car2[i]->init("lada", "granta", 300, 150, 2017);
+		std::cout << "Стоимость: " << i << car2[i]->Add(car1[i]) << std::endl;
+	}
+	for (int i = 0; i < 3; i++)
+		delete car2[i];
+	delete[] car2;
+	delete[] car1;
+
 
 
 	return 0;
