@@ -3,10 +3,48 @@
 #include <locale.h>
 #include <malloc.h>
 #include <iostream>
+#include <string>
 #pragma warning (disable:4996)
 #define SIZE 25
+using namespace std;
 
 
+class Engine {
+public:
+	Engine()
+	{
+
+	}
+	Engine(int cylinders, int capacity, int power)
+	{
+		this->cylinders = cylinders;
+		this->capacity = capacity;
+		this->power = power;
+	}
+	string GetInfo()
+	{
+		return "Двигатель: кол-во целинтров = " + to_string(cylinders) + " объем = " + to_string(capacity) + " мощность = " + to_string(power);
+	}
+	void Read()
+	{
+		puts("Введите кол-во целиндров в двигателе:");
+		scanf("%d", &this->cylinders);
+		fflush(stdin);
+
+		puts("Введите объем двигателя:");
+		scanf("%d", &this->capacity);
+		fflush(stdin);
+
+		puts("Введите мощность двигателя:");
+		scanf("%d", &this->power);
+		fflush(stdin);
+	}
+	
+	private:
+	int cylinders;
+	int capacity;
+	int power;
+};
 
 class Auto_show
 {
@@ -21,13 +59,15 @@ public:
 
 	}
 
-	void init(const char* brend, const char* name, int cost, int max_speed, int year)
+	void init(const char* brend, const char* name, int cost, int max_speed, int year, Engine eng1)
 	{
 		strcpy(this->autoBrend, brend);
 		strcpy(this->autoName, name);
 		this->autoCost = cost;
 		this->autoMax_speed = max_speed;
 		this->autoYear = year;
+		this->autoeng1 = eng1;
+
 	}
 
 	void Display()
@@ -38,7 +78,8 @@ public:
 		printf("Стоимость: %d\n", this->autoCost);
 		printf("Максимальная скорость: %d\n", this->autoMax_speed);
 		printf("Год выпуска: %d\n", this->autoYear);
-		printf("\n");
+		cout << autoeng1.GetInfo() << endl << endl;
+		//printf("\n");
 
 	}
 
@@ -48,11 +89,11 @@ public:
 		puts("Введите марку автомобиля:");
 		scanf("%s", this->autoBrend);
 		fflush(stdin);
-		
+
 		puts("Введите название автомобиля:");
 		scanf("%s", this->autoName);
 		fflush(stdin);
-		
+
 
 		puts("Введите стоимость автомобиля:");
 		scanf("%d", &this->autoCost);
@@ -61,10 +102,12 @@ public:
 		puts("Введите максимальную скорость автомобиля:");
 		scanf("%d", &this->autoMax_speed);
 		fflush(stdin);
-		
+
 		puts("Введите год выпуска автомобиля:");
 		scanf("%d", &this->autoYear);
 		fflush(stdin);
+
+		autoeng1.Read();
 
 	}
 
@@ -72,7 +115,7 @@ public:
 	{
 		return this->autoCost + second.autoCost;
 	}
-
+	
 
 
 private:
@@ -81,8 +124,8 @@ private:
 	int autoCost;
 	int autoMax_speed;
 	int autoYear;
-
-
+	Engine autoeng1;
+	//Engine eng2;
 };
 
 
@@ -97,12 +140,16 @@ int main()
 	puts("Первый автомобиль");
 
 	Auto_show first_auto;
-	first_auto.init("lada", "granta", 300, 150, 2017);
+	Engine autoeng(4, 2, 100);
+	first_auto.init("lada", "granta", 300, 150, 2017, autoeng);
 	first_auto.Display();
 
+
+	
 	puts("Второй автомобиль");
 	Auto_show second_auto;
 	second_auto.Read();
+
 	second_auto.Display();
 
 	printf("Стоимость двух автомобилей: %d\n", second_auto.Add(first_auto));
@@ -111,8 +158,8 @@ int main()
 
 	puts("Первый автомобиль");
 	Auto_show* auto_1 = (Auto_show*)malloc(sizeof(Auto_show));
-	
-	(*auto_1).init("lada", "granta", 300, 150, 2017);
+	Engine autoeng_1(4, 2, 100);
+	(*auto_1).init("lada", "granta", 300, 150, 2017, autoeng_1);
 	(*auto_1).Display();
 
 	puts("Второй автомобиль");
@@ -122,37 +169,6 @@ int main()
 
 	free(auto_1);
 	free(auto_2);
-
-
-	//динамич. массив объектов
-
-	puts("Динамич. массив");
-
-	puts("Первый автомобиль");
-	Auto_show* car1 = new Auto_show[3];
-
-	car1[0].init("lada", "granta", 300, 150, 2017);
-	car1[1].init("lada", "vesta", 900, 180, 2020);
-	car1[2].init("nissan", "gt-r", 3500, 300, 2014);
-	for (int i = 0; i < 3; i++)
-	{
-		car1[i].Display();
-	}
-
-
-
-	puts("Второй автомобиль");
-	Auto_show** car2 = new Auto_show * [3];
-	for (int i = 0; i < 3; i++)
-	{
-		car2[i] = new Auto_show();
-		car2[i]->init("lada", "granta", 300, 150, 2017);
-		std::cout << "Стоимость: " << i << car2[i]->Add(car1[i]) << std::endl;
-	}
-	for (int i = 0; i < 3; i++)
-		delete car2[i];
-	delete[] car2;
-	delete[] car1;
 
 
 
